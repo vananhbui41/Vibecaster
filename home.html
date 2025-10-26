@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quote Mood</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      color: #333;
+      padding: 20px;
+      transition: background 0.6s ease;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .mood-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background-color: #e0e0e0;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .happy { background-color: #fcd34d; }
+    .sad { background-color: #93c5fd; }
+    .neutral { background-color: #d1d5db; }
+
+    .quote {
+      font-style: italic;
+      font-size: 1.3rem;
+      color: #444;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      line-height: 1.5;
+    }
+
+    .quote.show {
+      opacity: 1;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .back-btn {
+      margin-top: 25px;
+      background: #e0e0e0;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .quote {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="mood-section">
+      <h1>What's your mood today?</h1>
+      <div class="mood-options">
+        <button class="happy">😊 Happy</button>
+        <button class="sad">😔 Sad</button>
+        <button class="neutral">😐 Neutral</button>
+      </div>
+    </div>
+
+    <div id="quote-section" class="hidden">
+      <p id="quote" class="quote"></p>
+      <button class="back-btn">← Choose again</button>
+    </div>
+  </div>
+
+  <script>
+    const quotes = {
+      happy: [
+        "Happiness is not something ready made. It comes from your own actions.",
+        "Smile! It’s a free therapy.",
+        "The purpose of our lives is to be happy."
+      ],
+      sad: [
+        "Even the darkest night will end and the sun will rise.",
+        "Tears are words that need to be written.",
+        "Sadness flies away on the wings of time."
+      ],
+      neutral: [
+        "Sometimes, peace is better than happiness.",
+        "Not every day has to be amazing — and that’s okay.",
+        "Balance is the key to everything."
+      ]
+    };
+
+    const buttons = document.querySelectorAll(".mood-options button");
+    const quoteElement = document.getElementById("quote");
+    const moodSection = document.getElementById("mood-section");
+    const quoteSection = document.getElementById("quote-section");
+    const backBtn = document.querySelector(".back-btn");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const mood = button.classList.contains("happy")
+          ? "happy"
+          : button.classList.contains("sad")
+          ? "sad"
+          : "neutral";
+
+        const randomQuote =
+          quotes[mood][Math.floor(Math.random() * quotes[mood].length)];
+
+        // Set quote text
+        quoteElement.textContent = randomQuote;
+        quoteElement.classList.add("show");
+
+        // Change background color
+        document.body.style.background =
+          mood === "happy"
+            ? "linear-gradient(135deg, #fceabb, #f8b500)"
+            : mood === "sad"
+            ? "linear-gradient(135deg, #89f7fe, #66a6ff)"
+            : "linear-gradient(135deg, #d3cce3, #e9e4f0)";
+
+        // Hide mood section and show quote
+        moodSection.classList.add("hidden");
+        quoteSection.classList.remove("hidden");
+      });
+    });
+
+    // Back button — choose mood again
+    backBtn.addEventListener("click", () => {
+      quoteElement.classList.remove("show");
+      moodSection.classList.remove("hidden");
+      quoteSection.classList.add("hidden");
+
+      // Reset background to default
+      document.body.style.background = "linear-gradient(135deg, #89f7fe, #66a6ff)";
+    });
+  </script>
+</body>
+</html>
